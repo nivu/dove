@@ -7,8 +7,8 @@ import { Chart } from "chart.js";
   styleUrls: ["./comp1.component.scss"]
 })
 export class Comp1Component {
-  @ViewChild("bodyTempCanvas", { static: false }) bodyTempCanvas;
-  @ViewChild("surrTempCanvas", { static: false }) surrTempCanvas;
+  @ViewChild("bodyTempCanvas", { static: false }) bodyTempCanvas: ElementRef;
+  @ViewChild("surrTempCanvas", { static: false }) surrTempCanvas: ElementRef;
 
   bodyTempChart: Chart;
   surrTempChart: Chart;

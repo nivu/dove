@@ -113,7 +113,7 @@ export class Tab1Page {
         ],
         datasets: [
           {
-            label: "Temperature",
+            label: "Humidity",
             fill: false,
             lineTension: 0.1,
             backgroundColor: "rgba(75,192,192,0.4)",
@@ -152,7 +152,7 @@ export class Tab1Page {
         ],
         datasets: [
           {
-            label: "Temperature",
+            label: "THI",
             fill: false,
             lineTension: 0.1,
             backgroundColor: "rgba(75,192,192,0.4)",
@@ -191,7 +191,7 @@ export class Tab1Page {
         ],
         datasets: [
           {
-            label: "Temperature",
+            label: "Heart Beat",
             fill: false,
             lineTension: 0.1,
             backgroundColor: "rgba(75,192,192,0.4)",
