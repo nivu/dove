@@ -1,7 +1,8 @@
 {
   "name": "dove",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {},
+    "cordova": {}
   },
   "type": "angular"
 }

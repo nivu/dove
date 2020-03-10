@@ -1,17 +1,56 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Tab 1
+      Home
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="ion-padding">
+    <ion-card>
+      <ion-card-header>
+        Body Temperature
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #bodyTempCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+    <ion-card>
+      <ion-card-header>
+        Surrounding Temperature
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #surrTempCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        Humidity
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #humidityCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        THI Readings
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #thiCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        Heart Beat
+      </ion-card-header>
+      <ion-card-content>
+        <canvas #heartCanvas></canvas>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

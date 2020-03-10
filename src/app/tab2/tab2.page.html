@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
       Tab 2
     </ion-title>
@@ -7,11 +7,35 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+
+  <!-- Segment with default selection -->
+  <ion-segment (ionChange)="segmentChanged($event)" value="fever" color="primary">
+    <ion-segment-button value="fever">
+      <ion-label>Fever</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="lameness">
+      <ion-label>Lameness</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="mastitis">
+      <ion-label>Mastitis</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="diarrhoea">
+      <ion-label>Diarrhoea</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div class="ion-padding" *ngIf="active == 'fever'">
+    <app-comp1></app-comp1>
+  </div>
+  <div class="ion-padding" *ngIf="active == 'lameness'">
+    <app-comp2></app-comp2>
+  </div>
+  <div class="ion-padding" *ngIf="active == 'mastitis'">
+    <app-comp3></app-comp3>
+  </div>
+  <div class="ion-padding" *ngIf="active == 'diarrhoea'">
+    <app-comp4></app-comp4>
+  </div>
+
 </ion-content>
