@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      Tab 2
+      App
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -25,17 +25,12 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div class="ion-padding" *ngIf="active == 'fever'">
-    <app-comp1></app-comp1>
-  </div>
-  <div class="ion-padding" *ngIf="active == 'lameness'">
-    <app-comp2></app-comp2>
-  </div>
-  <div class="ion-padding" *ngIf="active == 'mastitis'">
-    <app-comp3></app-comp3>
-  </div>
-  <div class="ion-padding" *ngIf="active == 'diarrhoea'">
-    <app-comp4></app-comp4>
-  </div>
+  <app-comp1 *ngIf="active == 'fever'"></app-comp1>
+
+  <app-comp2 *ngIf="active == 'lameness'"></app-comp2>
+
+  <app-comp3 *ngIf="active == 'mastitis'"></app-comp3>
+
+  <app-comp4 *ngIf="active == 'diarrhoea'"></app-comp4>
 
 </ion-content>
