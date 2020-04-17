@@ -1,9 +1,11 @@
 import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
+import { IMqttMessage, MqttService } from "ngx-mqtt";
+
 @Component({
   selector: "app-comp2",
   templateUrl: "./comp2.component.html",
-  styleUrls: ["./comp2.component.scss"]
+  styleUrls: ["./comp2.component.scss"],
 })
 export class Comp2Component implements OnInit {
   @ViewChild("accCanvas", { static: false }) accCanvas: ElementRef;
@@ -12,7 +14,47 @@ export class Comp2Component implements OnInit {
   accChart: Chart;
   stepCountChart: Chart;
 
-  constructor() {}
+  public message: string;
+
+  constructor(private _mqttService: MqttService) {
+    this._mqttService.observe("fever").subscribe((message: IMqttMessage) => {
+      this.message = message.payload.toString();
+      console.log(this.message);
+    });
+
+    setInterval(() => {
+      console.log("timer");
+
+      let random = Math.floor(Math.random() * 101);
+      this.addData(this.stepCountChart, [random]);
+      this.addData(this.accChart, [random, random + 15, random + 31]);
+    }, 3000);
+  }
+
+  addData = (chart, data) => {
+    let dateNow = new Date();
+
+    let label =
+      dateNow.getHours() +
+      ":" +
+      dateNow.getMinutes() +
+      ":" +
+      dateNow.getSeconds();
+
+    chart.data.labels.push(label);
+    if (chart.data.labels.length > 10) {
+      chart.data.labels.shift();
+    }
+    let i = 0;
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data[i]);
+      i += 1;
+      if (dataset.data.length > 10) {
+        dataset.data.shift();
+      }
+    });
+    chart.update();
+  };
 
   drawAccelerometer = () => {
     return new Chart(this.accCanvas.nativeElement, {
@@ -25,7 +67,7 @@ export class Comp2Component implements OnInit {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -48,7 +90,7 @@ export class Comp2Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [45, 39, 50, 71, 53, 35, 48],
-            spanGaps: false
+            spanGaps: false,
           },
           {
             label: "Y",
@@ -70,7 +112,7 @@ export class Comp2Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
+            spanGaps: false,
           },
           {
             label: "Z",
@@ -92,10 +134,10 @@ export class Comp2Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [5, 29, 84, 21, 46, 57, 20],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
   };
 
@@ -110,7 +152,7 @@ export class Comp2Component implements OnInit {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -133,10 +175,10 @@ export class Comp2Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
   };
 
@@ -147,6 +189,6 @@ export class Comp2Component implements OnInit {
       console.log("calling");
       this.accChart = this.drawAccelerometer();
       this.stepCountChart = this.drawStepCountChart();
-    }, 1000);
+    }, 3000);
   }
 }

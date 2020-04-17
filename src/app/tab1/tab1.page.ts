@@ -1,9 +1,12 @@
 import { Component, ViewChild, ElementRef } from "@angular/core";
 import { Chart } from "chart.js";
+
+import { IMqttMessage, MqttService } from "ngx-mqtt";
+
 @Component({
   selector: "app-tab1",
   templateUrl: "tab1.page.html",
-  styleUrls: ["tab1.page.scss"]
+  styleUrls: ["tab1.page.scss"],
 })
 export class Tab1Page {
   @ViewChild("bodyTempCanvas", { static: false }) bodyTempCanvas: ElementRef;
@@ -18,7 +21,59 @@ export class Tab1Page {
   thiChart: Chart;
   heartChart: Chart;
 
-  constructor() {}
+  lat = 11.332;
+  lng = 1.333;
+
+  public message: string;
+
+  constructor(private _mqttService: MqttService) {
+    this._mqttService.observe("BodyTemp").subscribe((message: IMqttMessage) => {
+      this.message = message.payload.toString();
+      console.log(this.message);
+    });
+    this._mqttService.observe("page1").subscribe((message: IMqttMessage) => {
+      this.message = message.payload.toString();
+      console.log(this.message);
+    });
+    this._mqttService
+      .observe("HeartBeat")
+      .subscribe((message: IMqttMessage) => {
+        this.message = message.payload.toString();
+        console.log(this.message);
+      });
+
+    setInterval(() => {
+      console.log("timer");
+
+      let random = Math.floor(Math.random() * 101);
+      this.addData(this.bodyTempChart, random);
+      this.addData(this.surrTempChart, random);
+      this.addData(this.humidityChart, random);
+    }, 3000);
+  }
+
+  addData = (chart, data) => {
+    let dateNow = new Date();
+
+    let label =
+      dateNow.getHours() +
+      ":" +
+      dateNow.getMinutes() +
+      ":" +
+      dateNow.getSeconds();
+
+    chart.data.labels.push(label);
+    if (chart.data.labels.length > 10) {
+      chart.data.labels.shift();
+    }
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+      if (dataset.data.length > 10) {
+        dataset.data.shift();
+      }
+    });
+    chart.update();
+  };
 
   ionViewDidEnter() {
     this.bodyTempChart = new Chart(this.bodyTempCanvas.nativeElement, {
@@ -31,7 +86,7 @@ export class Tab1Page {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -54,10 +109,10 @@ export class Tab1Page {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
 
     this.surrTempChart = new Chart(this.surrTempCanvas.nativeElement, {
@@ -70,7 +125,7 @@ export class Tab1Page {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -93,10 +148,10 @@ export class Tab1Page {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
 
     this.humidityChart = new Chart(this.humidityCanvas.nativeElement, {
@@ -109,7 +164,7 @@ export class Tab1Page {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -132,10 +187,10 @@ export class Tab1Page {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
 
     this.thiChart = new Chart(this.thiCanvas.nativeElement, {
@@ -148,7 +203,7 @@ export class Tab1Page {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -171,10 +226,10 @@ export class Tab1Page {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
 
     this.heartChart = new Chart(this.heartCanvas.nativeElement, {
@@ -187,7 +242,7 @@ export class Tab1Page {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -210,10 +265,10 @@ export class Tab1Page {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
   }
 }

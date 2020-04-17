@@ -1,9 +1,11 @@
 import { Component, ViewChild, ElementRef, OnInit } from "@angular/core";
 import { Chart } from "chart.js";
+import { IMqttMessage, MqttService } from "ngx-mqtt";
+
 @Component({
   selector: "app-comp4",
   templateUrl: "./comp4.component.html",
-  styleUrls: ["./comp4.component.scss"]
+  styleUrls: ["./comp4.component.scss"],
 })
 export class Comp4Component implements OnInit {
   @ViewChild("bodyTempCanvas", { static: false }) bodyTempCanvas: ElementRef;
@@ -14,7 +16,48 @@ export class Comp4Component implements OnInit {
   soundChart: Chart;
   accChart: Chart;
 
-  constructor() {}
+  public message: string;
+
+  constructor(private _mqttService: MqttService) {
+    this._mqttService.observe("fever").subscribe((message: IMqttMessage) => {
+      this.message = message.payload.toString();
+      console.log(this.message);
+    });
+
+    setInterval(() => {
+      console.log("timer");
+
+      let random = Math.floor(Math.random() * 101);
+      this.addData(this.bodyTempChart, [random]);
+      this.addData(this.soundChart, [random]);
+      this.addData(this.accChart, [random, random + 15, random + 31]);
+    }, 3000);
+  }
+
+  addData = (chart, data) => {
+    let dateNow = new Date();
+
+    let label =
+      dateNow.getHours() +
+      ":" +
+      dateNow.getMinutes() +
+      ":" +
+      dateNow.getSeconds();
+
+    chart.data.labels.push(label);
+    if (chart.data.labels.length > 10) {
+      chart.data.labels.shift();
+    }
+    let i = 0;
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data[i]);
+      i += 1;
+      if (dataset.data.length > 10) {
+        dataset.data.shift();
+      }
+    });
+    chart.update();
+  };
 
   drawBodyTempChart = () => {
     return new Chart(this.bodyTempCanvas.nativeElement, {
@@ -27,7 +70,7 @@ export class Comp4Component implements OnInit {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -50,10 +93,10 @@ export class Comp4Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
   };
 
@@ -68,7 +111,7 @@ export class Comp4Component implements OnInit {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -91,10 +134,10 @@ export class Comp4Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
   };
 
@@ -109,7 +152,7 @@ export class Comp4Component implements OnInit {
           "1:30PM",
           "1:40PM",
           "1:50PM",
-          "2:00PM"
+          "2:00PM",
         ],
         datasets: [
           {
@@ -132,7 +175,7 @@ export class Comp4Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [45, 39, 50, 71, 53, 35, 48],
-            spanGaps: false
+            spanGaps: false,
           },
           {
             label: "Y",
@@ -154,7 +197,7 @@ export class Comp4Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [65, 59, 80, 81, 56, 55, 40],
-            spanGaps: false
+            spanGaps: false,
           },
           {
             label: "Z",
@@ -176,10 +219,10 @@ export class Comp4Component implements OnInit {
             pointRadius: 1,
             pointHitRadius: 10,
             data: [5, 29, 84, 21, 46, 57, 20],
-            spanGaps: false
-          }
-        ]
-      }
+            spanGaps: false,
+          },
+        ],
+      },
     });
   };
 
@@ -191,6 +234,6 @@ export class Comp4Component implements OnInit {
       this.bodyTempChart = this.drawBodyTempChart();
       this.soundChart = this.drawSoundChart();
       this.accChart = this.drawAccelerometer();
-    }, 1000);
+    }, 3000);
   }
 }
